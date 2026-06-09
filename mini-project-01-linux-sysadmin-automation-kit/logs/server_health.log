@@ -1,0 +1,32 @@
+Server Health Check Report
+Date and Time : Mon Jun  8 23:28:31 IST 2026
+Hostname      : LAPTOP-AAVLH7D7
+Current User  : Yash
+
+Disk Usage:
+Filesystem            Size  Used Avail Use% Mounted on
+C:/Program Files/Git  275G  167G  108G  61% /
+D:                    200G  7.1G  193G   4% /d
+
+RAM Usage:
+RAM usage command is not available in this terminal environment.
+
+CPU Load Average:
+
+Top Running Processes:
+      PID    PPID    PGID     WINPID   TTY         UID    STIME COMMAND
+      499       1     499      18964  ?         197609 23:01:30 /usr/bin/mintty
+      640     633     633      11688  pty0      197609 23:28:31 /usr/bin/ps
+      633     500     633       2596  pty0      197609 23:28:30 /usr/bin/bash
+      500     499     500      33392  pty0      197609 23:01:30 /usr/bin/bash
+      641     633     633      25804  pty0      197609 23:28:31 /usr/bin/head
+
+Service Status:
+ssh : Service check requires Linux systemctl support
+cron : Service check requires Linux systemctl support
+docker : Service check requires Linux systemctl support
+
+Logged-in Users:
+
+Health check completed successfully.
+
