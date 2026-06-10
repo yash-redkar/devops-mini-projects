@@ -1,0 +1,21 @@
+{
+  "name": "dockerized-todo-api",
+  "version": "1.0.0",
+  "description": "A simple Dockerized To-Do REST API built with Node.js and Express.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "docker",
+    "todo-api",
+    "devops"
+  ],
+  "author": "Yash Redkar",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
