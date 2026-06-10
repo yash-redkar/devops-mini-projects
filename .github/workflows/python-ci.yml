@@ -4,9 +4,16 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "mini-project-04-ci-pipeline-python-app/**"
+      - ".github/workflows/python-ci.yml"
+
   pull_request:
     branches:
       - main
+    paths:
+      - "mini-project-04-ci-pipeline-python-app/**"
+      - ".github/workflows/python-ci.yml"
 
 jobs:
   build-test:
