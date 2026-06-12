@@ -3,3 +3,4 @@ __pycache__/
 .env.local
 postgres_data/
 .pytest_cache/
+.env
