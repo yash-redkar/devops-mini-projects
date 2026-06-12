@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 40px;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 0 14px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #4b5563;
+            margin-bottom: 24px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .note {
+            background: #eef2ff;
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 5px solid #2563eb;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            margin-top: 8px;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .status {
+            padding: 10px;
+            background: #dcfce7;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+</head>
+<body>
+    <div class="container">
+        <h1>Student Notes App</h1>
+            DevOps Mini Project 05: Nginx + Flask + PostgreSQL using Docker Compose
+        </p>
+        <div id="status" class="status">Checking backend health...</div>
+
+        <input id="title" placeholder="Enter note title">
+        <button onclick="addNote()">Add Note</button>
+
+        <h2>Saved Notes</h2>
+        <div id="notes"></div>
+    </div>
+
+    <script>
+        async function checkHealth() {
+            try {
+                const response = await fetch("/api/health");
+
+                document.getElementById("status").innerText =
+                    `Backend: ${data.status} | Database: ${data.database}`;
+            } catch (error) {
+                document.getElementById("status").innerText =
+                    "Backend connection failed";
+            }
+        }
+
+        async function loadNotes() {
+            const response = await fetch("/api/notes");
+            const notes = await response.json();
+
+            const notesDiv = document.getElementById("notes");
+            notesDiv.innerHTML = "";
+
+            notes.forEach(note => {
+                div.className = "note";
+                div.innerHTML = `
+                    <strong>${note.title}</strong>
+                    <p>${note.content}</p>
+                    <small>${note.created_at}</small>
+                    <button class="delete-btn" onclick="deleteNote(${note.id})">
+                        Delete
+                `;
+                notesDiv.appendChild(div);
+            });
+        }
+
+        async function addNote() {
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+
+            await fetch("/api/notes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title, content })
+            });
+
+            document.getElementById("title").value = "";
+            document.getElementById("content").value = "";
+
+            loadNotes();
+        }
+
+        async function deleteNote(id) {
+            await fetch(`/api/notes/${id}`, {
+                method: "DELETE"
+            });
+
+            loadNotes();
+        }
+
+        checkHealth();
+        loadNotes();
+    </script>
+</body>
+</html>                    </button>
+                const div = document.createElement("div");
+                const data = await response.json();
+        <textarea id="content" placeholder="Enter note content"></textarea>
+
+        <p class="subtitle">
+    </style>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 40px;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 0 14px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #4b5563;
+            margin-bottom: 24px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .note {
+            background: #eef2ff;
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 5px solid #2563eb;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            margin-top: 8px;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .status {
+            padding: 10px;
+            background: #dcfce7;
+            border-radius: 6px;
+            color: #166534;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Notes App</h1>
+        <p class="subtitle">
+            DevOps Mini Project 05: Nginx + Flask + PostgreSQL using Docker Compose
+        </p>
+
+        <div id="status" class="status">Checking backend health...</div>
+
+        <input id="title" placeholder="Enter note title">
+        <textarea id="content" placeholder="Enter note content"></textarea>
+        <button onclick="addNote()">Add Note</button>
+
+        <h2>Saved Notes</h2>
+        <div id="notes"></div>
+    </div>
+
+    <script>
+        async function checkHealth() {
+            try {
+                const response = await fetch("/api/health");
+                const data = await response.json();
+
+                document.getElementById("status").innerText =
+                    `Backend: ${data.status} | Database: ${data.database}`;
+            } catch (error) {
+                document.getElementById("status").innerText =
+                    "Backend connection failed";
+            }
+        }
+
+        async function loadNotes() {
+            const response = await fetch("/api/notes");
+            const notes = await response.json();
+
+            const notesDiv = document.getElementById("notes");
+            notesDiv.innerHTML = "";
+
+            notes.forEach(note => {
+                const div = document.createElement("div");
+                div.className = "note";
+                div.innerHTML = `
+                    <strong>${note.title}</strong>
+                    <p>${note.content}</p>
+                    <small>${note.created_at}</small>
+                    <button class="delete-btn" onclick="deleteNote(${note.id})">
+                        Delete
+                    </button>
+                `;
+                notesDiv.appendChild(div);
+            });
+        }
+
+        async function addNote() {
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+
+            await fetch("/api/notes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title, content })
+            });
+
+            document.getElementById("title").value = "";
+            document.getElementById("content").value = "";
+
+            loadNotes();
+        }
+
+        async function deleteNote(id) {
+            await fetch(`/api/notes/${id}`, {
+                method: "DELETE"
+            });
+
+            loadNotes();
+        }
+
+        checkHealth();
+        loadNotes();
+    </script>
+</body>
+</html>
