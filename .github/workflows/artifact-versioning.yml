@@ -1,0 +1,84 @@
+name: Mini Project 06 Artifact Versioning Pipeline
+
+on:
+  push:
+    tags:
+      - "mp06-v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PROJECT_DIR: mini-project-06-automated-artifact-versioning-pipeline
+  IMAGE_NAME: artifact-versioning-api
+
+jobs:
+  build-push-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version and commit metadata
+        id: meta
+        run: |
+          TAG_NAME="${GITHUB_REF_NAME}"
+          VERSION="${TAG_NAME#mp06-}"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
+
+      - name: Generate release changelog
+        run: |
+          echo "# Release ${{ steps.meta.outputs.version }}" > release-notes.md
+          echo "" >> release-notes.md
+          echo "## Docker Image" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "- Docker Hub Repository: \`${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}\`" >> release-notes.md
+          echo "- Semantic Version Tag: \`${{ steps.meta.outputs.version }}\`" >> release-notes.md
+          echo "- Commit SHA Tag: \`sha-${{ steps.meta.outputs.sha_short }}\`" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## Changelog" >> release-notes.md
+          echo "" >> release-notes.md
+          git log -10 --pretty=format:"- %s (%h)" >> release-notes.md
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.PROJECT_DIR }}
+          push: true
+          build-args: |
+            APP_VERSION=${{ steps.meta.outputs.version }}
+            COMMIT_SHA=${{ steps.meta.outputs.sha_short }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:sha-${{ steps.meta.outputs.sha_short }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-${{ steps.meta.outputs.version }}
+          path: release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag_name }}
+          name: Mini Project 06 Release ${{ steps.meta.outputs.version }}
+          body_path: release-notes.md
