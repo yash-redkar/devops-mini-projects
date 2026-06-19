@@ -3,7 +3,7 @@
 This repository contains all mini projects completed during the DevOps training program.
 
 Each mini project is maintained in a separate folder inside this single repository.
-The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, networking, persistent storage, artifact versioning, and release automation.
+The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, Kubernetes, networking, persistent storage, artifact versioning, self-healing, and release automation.
 
 ## Mini Projects List
 
@@ -15,7 +15,7 @@ The projects demonstrate hands-on DevOps skills including Linux automation, Git 
 | 04  | CI Pipeline for a Python App           | Completed |
 | 05  | Docker Compose Full-Stack App          | Completed |
 | 06  | Automated Artifact Versioning Pipeline | Completed |
-| 07  | Kubernetes Self-Healing App Demo       | Pending   |
+| 07  | Kubernetes Self-Healing App Demo       | Completed |
 | 08  | Kubernetes Horizontal Pod Autoscaler   | Pending   |
 | 09  | Prometheus + Grafana Monitoring Stack  | Pending   |
 | 10  | Terraform AWS EC2 Deployment           | Pending   |
@@ -118,6 +118,42 @@ yashredkar/artifact-versioning-api:v1.0.0
 mp06-v1.0.0
 ```
 
+---
+
+### Mini Project 07: Kubernetes Self-Healing App Demo
+
+A Kubernetes self-healing demo using Minikube. The project deploys an Nginx web application using a Kubernetes Deployment with 3 replicas.
+
+The application is exposed using:
+
+* ClusterIP Service for internal access
+* NodePort Service for external browser access
+
+A shell script randomly deletes one running pod to simulate failure. Kubernetes automatically creates a replacement pod and restores the deployment back to 3 running replicas.
+
+**Skills used:** Kubernetes, Minikube, kubectl, YAML, Deployments, ReplicaSets, Services, Shell Scripting
+
+**Self-healing proof:**
+
+```text
+Before deletion: 3 pods Running
+Deleted pod: self-healing-web-75dcbc9c66-kblgs
+New replacement pod: self-healing-web-75dcbc9c66-wk6wv
+Final deployment status: 3/3 READY
+```
+
+**Run command:**
+
+```bash
+kubectl apply -f k8s/
+```
+
+**Chaos script:**
+
+```bash
+./scripts/pod-chaos.sh
+```
+
 ## Repository Structure
 
 ```text
@@ -164,17 +200,27 @@ vit-devops-projects/
 │   ├── backend/
 │   └── frontend/
 │
-└── mini-project-06-automated-artifact-versioning-pipeline/
-    ├── app.py
-    ├── Dockerfile
-    ├── requirements.txt
-    ├── README.md
-    └── .dockerignore
+├── mini-project-06-automated-artifact-versioning-pipeline/
+│   ├── app.py
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── README.md
+│   └── .dockerignore
+│
+└── mini-project-07-kubernetes-self-healing-app-demo/
+    ├── k8s/
+    │   ├── namespace.yaml
+    │   ├── deployment.yaml
+    │   ├── clusterip-service.yaml
+    │   └── nodeport-service.yaml
+    ├── scripts/
+    │   └── pod-chaos.sh
+    └── README.md
 ```
 
 ## Current Status
 
-Mini Projects 01 to 06 are completed, tested, and pushed to GitHub.
+Mini Projects 01 to 07 are completed, tested, and pushed to GitHub.
 
 The repository currently demonstrates:
 
@@ -186,8 +232,10 @@ The repository currently demonstrates:
 * Automated Docker image versioning
 * Docker Hub release artifact publishing
 * GitHub Release automation
+* Kubernetes Deployments and Services
+* Kubernetes self-healing using ReplicaSets
 
-Upcoming projects will focus on Kubernetes, monitoring, Terraform, cloud deployment, secrets management, and rollback strategies.
+Upcoming projects will focus on Kubernetes autoscaling, monitoring, Terraform, cloud deployment, secrets management, and rollback strategies.
 
 ## Author
 
