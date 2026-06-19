@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: self-healing-web
+  namespace: self-healing-demo
+  labels:
+    app: self-healing-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: self-healing-web
+  template:
+    metadata:
+      labels:
+        app: self-healing-web
+    spec:
+      containers:
+        - name: web
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"

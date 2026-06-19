@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: self-healing-clusterip
+  namespace: self-healing-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: self-healing-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
