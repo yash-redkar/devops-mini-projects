@@ -3,7 +3,7 @@
 This repository contains all mini projects completed during the DevOps training program.
 
 Each mini project is maintained in a separate folder inside this single repository.
-The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, Kubernetes, networking, persistent storage, artifact versioning, self-healing, and release automation.
+The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, Kubernetes, networking, persistent storage, artifact versioning, self-healing, autoscaling, metrics, and release automation.
 
 ## Mini Projects List
 
@@ -16,7 +16,7 @@ The projects demonstrate hands-on DevOps skills including Linux automation, Git 
 | 05  | Docker Compose Full-Stack App          | Completed |
 | 06  | Automated Artifact Versioning Pipeline | Completed |
 | 07  | Kubernetes Self-Healing App Demo       | Completed |
-| 08  | Kubernetes Horizontal Pod Autoscaler   | Pending   |
+| 08  | Kubernetes Horizontal Pod Autoscaler   | Completed |
 | 09  | Prometheus + Grafana Monitoring Stack  | Pending   |
 | 10  | Terraform AWS EC2 Deployment           | Pending   |
 | 11  | Static Website CI/CD to S3             | Pending   |
@@ -154,6 +154,49 @@ kubectl apply -f k8s/
 ./scripts/pod-chaos.sh
 ```
 
+---
+
+### Mini Project 08: Kubernetes Horizontal Pod Autoscaler
+
+A Kubernetes autoscaling demo using Minikube, Metrics Server, and Horizontal Pod Autoscaler.
+
+The project deploys a CPU-intensive Flask application with an initial replica count of 2 pods. HPA monitors CPU usage and automatically scales the application between 2 and 8 pods.
+
+The application is exposed using a NodePort Service and load is generated against the CPU-intensive endpoint.
+
+**Skills used:** Kubernetes, Minikube, kubectl, YAML, Metrics Server, Horizontal Pod Autoscaler, Load Testing, Docker, Flask
+
+**Autoscaling proof:**
+
+```text
+Initial replicas: 2
+CPU target: 50%
+CPU reached: 413% / 50%
+Scale up: 2 → 4 → 8 pods
+Scale down: 8 → 2 pods
+Final CPU: 1% / 50%
+```
+
+**HPA event proof:**
+
+```text
+SuccessfulRescale New size: 4; reason: cpu resource utilization above target
+SuccessfulRescale New size: 8; reason: cpu resource utilization above target
+SuccessfulRescale New size: 2; reason: All metrics below target
+```
+
+**Run command:**
+
+```bash
+kubectl apply -f k8s/
+```
+
+**Watch HPA:**
+
+```bash
+kubectl get hpa -n hpa-demo -w
+```
+
 ## Repository Structure
 
 ```text
@@ -207,20 +250,29 @@ vit-devops-projects/
 │   ├── README.md
 │   └── .dockerignore
 │
-└── mini-project-07-kubernetes-self-healing-app-demo/
+├── mini-project-07-kubernetes-self-healing-app-demo/
+│   ├── k8s/
+│   ├── scripts/
+│   └── README.md
+│
+└── mini-project-08-kubernetes-hpa/
+    ├── app/
+    │   ├── app.py
+    │   ├── Dockerfile
+    │   └── requirements.txt
     ├── k8s/
     │   ├── namespace.yaml
     │   ├── deployment.yaml
-    │   ├── clusterip-service.yaml
-    │   └── nodeport-service.yaml
+    │   ├── service.yaml
+    │   └── hpa.yaml
     ├── scripts/
-    │   └── pod-chaos.sh
+    │   └── load-test.sh
     └── README.md
 ```
 
 ## Current Status
 
-Mini Projects 01 to 07 are completed, tested, and pushed to GitHub.
+Mini Projects 01 to 08 are completed, tested, and pushed to GitHub.
 
 The repository currently demonstrates:
 
@@ -234,8 +286,9 @@ The repository currently demonstrates:
 * GitHub Release automation
 * Kubernetes Deployments and Services
 * Kubernetes self-healing using ReplicaSets
+* Kubernetes autoscaling using HPA and Metrics Server
 
-Upcoming projects will focus on Kubernetes autoscaling, monitoring, Terraform, cloud deployment, secrets management, and rollback strategies.
+Upcoming projects will focus on monitoring, Terraform, cloud deployment, secrets management, and rollback strategies.
 
 ## Author
 
