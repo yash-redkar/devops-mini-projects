@@ -3,7 +3,7 @@
 This repository contains all mini projects completed during the DevOps training program.
 
 Each mini project is maintained in a separate folder inside this single repository.
-The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, Kubernetes, networking, persistent storage, artifact versioning, self-healing, autoscaling, metrics, and release automation.
+The projects demonstrate hands-on DevOps skills including Linux automation, Git workflow, Docker, Docker Hub, GitHub Actions, Docker Compose, Kubernetes, networking, persistent storage, artifact versioning, self-healing, autoscaling, monitoring, metrics collection, dashboard visualization, and release automation.
 
 ## Mini Projects List
 
@@ -17,7 +17,7 @@ The projects demonstrate hands-on DevOps skills including Linux automation, Git 
 | 06  | Automated Artifact Versioning Pipeline | Completed |
 | 07  | Kubernetes Self-Healing App Demo       | Completed |
 | 08  | Kubernetes Horizontal Pod Autoscaler   | Completed |
-| 09  | Prometheus + Grafana Monitoring Stack  | Pending   |
+| 09  | Prometheus + Grafana Monitoring Stack  | Completed |
 | 10  | Terraform AWS EC2 Deployment           | Pending   |
 | 11  | Static Website CI/CD to S3             | Pending   |
 | 12  | Multi-Environment Deployment Pipeline  | Pending   |
@@ -197,6 +197,65 @@ kubectl apply -f k8s/
 kubectl get hpa -n hpa-demo -w
 ```
 
+---
+
+### Mini Project 09: Prometheus + Grafana Monitoring Stack
+
+A Kubernetes monitoring project using Prometheus, Grafana, Helm, and a sample Flask application.
+
+The Flask application exposes custom metrics through the `/metrics` endpoint. Prometheus scrapes the metrics using a `ServiceMonitor`, and Grafana visualizes them through a custom dashboard.
+
+The Grafana dashboard includes:
+
+* Request Rate
+* Error Rate
+* Request Rate by Endpoint
+* Pod CPU Usage
+* Pod Memory Usage
+
+**Skills used:** Kubernetes, Minikube, Helm, Prometheus, Grafana, ServiceMonitor, PromQL, Docker, Flask, Metrics Monitoring
+
+**Prometheus target proof:**
+
+```text
+serviceMonitor/monitoring-demo/monitoring-demo-servicemonitor/0
+2 / 2 up
+```
+
+**Grafana dashboard proof:**
+
+```text
+Request Rate graph visible
+Error Rate graph visible
+Endpoint-wise traffic visible
+Pod CPU usage visible
+Pod memory usage visible
+```
+
+**Dashboard export:**
+
+```text
+dashboard/grafana-dashboard.json
+```
+
+**Run command:**
+
+```bash
+kubectl apply -f k8s/
+```
+
+**Access Prometheus:**
+
+```bash
+kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus 9090:9090
+```
+
+**Access Grafana:**
+
+```bash
+kubectl port-forward -n monitoring svc/monitoring-grafana 3001:80
+```
+
 ## Repository Structure
 
 ```text
@@ -255,7 +314,13 @@ vit-devops-projects/
 │   ├── scripts/
 │   └── README.md
 │
-└── mini-project-08-kubernetes-hpa/
+├── mini-project-08-kubernetes-hpa/
+│   ├── app/
+│   ├── k8s/
+│   ├── scripts/
+│   └── README.md
+│
+└── mini-project-09-prometheus-grafana-monitoring-stack/
     ├── app/
     │   ├── app.py
     │   ├── Dockerfile
@@ -264,15 +329,16 @@ vit-devops-projects/
     │   ├── namespace.yaml
     │   ├── deployment.yaml
     │   ├── service.yaml
-    │   └── hpa.yaml
-    ├── scripts/
-    │   └── load-test.sh
+    │   └── servicemonitor.yaml
+    ├── dashboard/
+    │   └── grafana-dashboard.json
+    ├── notes.md
     └── README.md
 ```
 
 ## Current Status
 
-Mini Projects 01 to 08 are completed, tested, and pushed to GitHub.
+Mini Projects 01 to 09 are completed, tested, documented, and pushed to GitHub.
 
 The repository currently demonstrates:
 
@@ -287,8 +353,12 @@ The repository currently demonstrates:
 * Kubernetes Deployments and Services
 * Kubernetes self-healing using ReplicaSets
 * Kubernetes autoscaling using HPA and Metrics Server
+* Prometheus metrics scraping using ServiceMonitor
+* Grafana dashboard visualization
+* Pod CPU and memory monitoring
+* Application request and error monitoring
 
-Upcoming projects will focus on monitoring, Terraform, cloud deployment, secrets management, and rollback strategies.
+Upcoming projects will focus on Terraform, AWS cloud deployment, multi-environment pipelines, log aggregation, secrets management, and rollback strategies.
 
 ## Author
 
